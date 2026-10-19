@@ -1,0 +1,6 @@
+app:
+  wxo_url: test_url
+auth:
+  wxo_mcsp_token:
+    token: test_token
+    exp: 0

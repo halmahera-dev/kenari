@@ -1,0 +1,32 @@
+Ini intinya adalah sistem (kayaknya pakai AI) yang dirancang buat nyariin beasiswa buat user. Alurnya jalan dari kiri ke kanan.
+
+### 1. Tahap Input (Paling Kiri)
+
+* **`biodata user` & `Input User`**: Prosesnya dimulai dari sini. User ngasih data diri dan permintaan. Contohnya jelas banget tuh: "Aku mau beasiswa jurusan IT untuk tingkat S1 di Amerika Serikat."
+* **`Scholarship Attribute`**: Ini adalah daftar info apa aja yang *sebenarnya* dibutuhkan sistem buat nyari, kayak: jenjang (S1/S2), negara, jumlah beasiswa (full/partial), dan kapan mau daftar.
+
+### 2. Tahap Manajer & Pengecekan (Tengah)
+
+* **`DecideAgent`**: Semua input tadi masuk ke agen ini. Anggap aja dia ini "Manajer Proyek"-nya. Dia yang terima permintaan dan nentuin harus ngapain selanjutnya.
+* **`GuardrailAgent`**: Si Manajer (`DecideAgent`) pertama-tama ngecek ke "Satpam" (`GuardrailAgent`). Tugasnya `GuardrailAgent` adalah mastiin kalo permintaan user itu emang beneran soal nyari beasiswa, bukan ngelantur ke topik lain.
+* **`CompletenessAgent`**: Sambil ngecek ke satpam, si Manajer juga ngecek ke "Evaluator Kelengkapan" (`CompletenessAgent`). Agen ini nge-review apakah info dari user udah cukup buat diproses.
+    * **Kalau Belum Lengkap:** Dia bakal nanya balik ke user. Contohnya di gambar: "Beasiswanya s1 atau s2 nih?", "Negara preferensinya apa?", "Mau beasiswa full atau gak?".
+    * **Kalau Sudah Lengkap:** Di gambar ada alur dari `DecideAgent` ke `ScholarshipAgent` dengan keterangan **"Kondisi ketika field udh lengkap"**.
+
+### 3. Tahap Eksekusi Pencarian (Tengah ke Kanan)
+
+* **`ScholarshipAgent`**: Kalau data udah lengkap dan relevan, si Manajer (`DecideAgent`) bakal ngasih tugas utama ke "Agen Pekerja" (`ScholarshipAgent`). Tugas dia jelas: "Bertanggung jawab untuk memproses pencarian scholarship".
+* **`WebTool`, `KeywordTool`, `DatabaseTool`**: Buat ngerjain tugasnya, si `ScholarshipAgent` ini pakai 3 alat:
+    1.  **`WebTool`**: Buat nyari info di internet/web.
+    2.  **`KeywordTool`**: Kemungkinan buat mecah permintaan user jadi kata kunci pencarian yang efektif.
+    3.  **`DatabaseTool`**: Buat nyari di database internal yang udah nyimpen data beasiswa.
+
+### 4. Tahap Validasi & Hasil (Paling Kanan)
+
+* **Proses Ambil Data**: Kayaknya si `DatabaseTool` ngambil banyak data dulu. Di situ ada contoh data JSON (`scholarship_id`, `scholarship_name`, dll) dan ada catatan "diambil 20" (mungkin ambil 20 hasil).
+* **`ValidatorTool`**: Hasil yang 20 biji tadi nggak langsung dikasih ke user. Datanya dilempar dulu ke "Validator" (`ValidatorTool`). Alat ini yang bakal nge-filter, ngecek ulang, dan milih mana yang paling pas.
+* **Hasil Akhir**: Setelah divalidasi, hasilnya jadi lebih sedikit tapi akurat. Di situ dicontohin "diambil 2". Akhirnya, output-nya adalah `scholarship a` dan `scholarship b`, yang merupakan rekomendasi beasiswa terbaik buat si user.
+
+**Singkatnya:** User ngasih permintaan -> Manajer (DecideAgent) nerima -> Dicek dulu (Guardrail & Completeness) -> Kalo belum lengkap, ditanyain lagi -> Kalo udah lengkap, dilempar ke Eksekutor (ScholarshipAgent) -> Si Eksekutor nyari pakai 3 alat (Web, Keyword, Database) -> Hasilnya (misal 20) difilter (Validator) -> Hasil akhirnya (misal 2) dikasih ke user.
+
+Sekarang. Buatlah kodenya tetapi menggunakan urutan kode yang ada di @src/ibm_watsonx_orchestrate

@@ -1,0 +1,5 @@
+context:
+  active_environment: testing
+environments:
+  testing:
+    wxo_url: http://localhost:1234/testing

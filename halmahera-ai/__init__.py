@@ -1,0 +1,1 @@
+# Halmahera AI - Scholarship Search API

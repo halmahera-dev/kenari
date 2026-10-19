@@ -1,0 +1,3 @@
+include VERSION
+include ibm_watsonx_orchestrate/messaging/messages_en.json
+include ibm_watsonx_orchestrate/utils/API_VERSION_PARAM

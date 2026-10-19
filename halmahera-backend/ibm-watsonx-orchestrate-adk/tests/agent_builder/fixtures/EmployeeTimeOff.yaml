@@ -1,0 +1,52 @@
+paths:
+  /employees/{employeeId}/timeoff:
+    get:
+      operationId: getEmployeeTimeOff
+      summary: Get an employee's time off records
+      parameters:
+        - name: employeeId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: year
+          in: query
+          required: false
+          schema:
+            type: integer
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved time off records
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        startDate:
+                          type: string
+                          format: date
+                        endDate:
+                          type: string
+                          format: date
+                        type:
+                          type: string
+                          enum: [vacation, sick, personal]
+                        status:
+                          type: string
+                          enum: [approved, pending, rejected]
+                required:
+                  - records
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Basic authentication using employee credentials

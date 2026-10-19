@@ -1,0 +1,20 @@
+# requirements.txt - Scholarship Search System
+
+# watsonx Orchestrate ADK
+ibm-watsonx-orchestrate>=1.0.0
+
+# LangChain stack
+langchain
+langchain-core
+langchain-ibm
+
+# Elasticsearch
+elasticsearch>=8.0.0
+elasticsearch-dsl>=8.0.0
+
+# Data processing
+pydantic>=2.0.0
+python-dateutil
+
+# Optional: for enhanced NLP
+sentence-transformers  # for semantic search

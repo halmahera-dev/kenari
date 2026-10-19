@@ -1,0 +1,155 @@
+{
+  "spec": {
+    "kind": "flow",
+    "name": "custom_flow_docclassifier_example",
+    "display_name": "custom_flow_docclassifier_example",
+    "description": "Extraction of custom classes from a document, specified by the user.",
+    "input_schema": {
+      "$ref": "#/schemas/custom_flow_docclassifier_example_input"
+    },
+    "schedulable": false
+  },
+  "nodes": {
+    "document_classifier_node": {
+      "spec": {
+        "kind": "docclassifier",
+        "name": "document_classifier_node",
+        "display_name": "document_classifier_node",
+        "description": "Classify custom classes from a document",
+        "input_schema": {
+          "$ref": "#/schemas/document_classifier_node_input"
+        },
+        "output_schema": {
+          "$ref": "#/schemas/DocumentClassificationResponse"
+        },
+        "version": "TIP",
+        "config": {
+          "domain": "other",
+          "type": "class_configuration",
+          "llm": "watsonx/meta-llama/llama-3-2-11b-vision-instruct",
+          "min_confidence": 0.0,
+          "classes": [
+            {
+              "class_name": "Buyer",
+              "class_id": "b96c4253-0313-57fb-9849-8ad1652763e9"
+            },
+            {
+              "class_name": "Seller",
+              "class_id": "36523c04-5a39-5b77-81b1-eed40628c248"
+            },
+            {
+              "class_name": "Agreement_Date",
+              "class_id": "50099c0f-34ac-545d-89ad-8f9b4154c0f0"
+            }
+          ]
+        },
+        "task": "custom_document_classification"
+      }
+    },
+    "__start__": {
+      "spec": {
+        "kind": "start",
+        "name": "__start__",
+        "display_name": "__start__"
+      }
+    },
+    "__end__": {
+      "spec": {
+        "kind": "end",
+        "name": "__end__",
+        "display_name": "__end__"
+      }
+    }
+  },
+  "edges": [
+    {
+      "start": "__start__",
+      "end": "document_classifier_node"
+    },
+    {
+      "start": "document_classifier_node",
+      "end": "__end__"
+    }
+  ],
+  "schemas": {
+    "custom_flow_docclassifier_example_input": {
+      "type": "object",
+      "title": "custom_flow_docclassifier_example_input",
+      "required": [],
+      "properties": {
+        "document_ref": {
+          "title": "Document reference",
+          "description": "Either an ID or a URL identifying the document to be used.",
+          "format": "binary",
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "binary"
+            },
+            {
+              "type": "string",
+              "title": "Document reference",
+              "description": "Either an ID or a URL identifying the document to be used.",
+              "required": [],
+              "format": "binary"
+            }
+          ]
+        }
+      }
+    },
+    "document_classifier_node_input": {
+      "type": "object",
+      "title": "document_classifier_node_input",
+      "required": [],
+      "properties": {
+        "document_ref": {
+          "title": "Document reference",
+          "description": "Either an ID or a URL identifying the document to be used.",
+          "format": "binary",
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "binary"
+            },
+            {
+              "type": "string",
+              "title": "Document reference",
+              "description": "Either an ID or a URL identifying the document to be used.",
+              "required": [],
+              "format": "binary"
+            }
+          ]
+        }
+      }
+    },
+    "CustomClassOutput": {
+      "type": "object",
+      "title": "CustomClassOutput",
+      "properties": {
+        "class_name": {
+          "type": "string",
+          "title": "Class Name",
+          "description": "Class Name of the Document",
+          "default": []
+        }
+      }
+    },
+    "DocumentClassificationResponse": {
+      "type": "object",
+      "title": "DocumentClassificationResponse",
+      "required": [
+        "custom_class_response"
+      ],
+      "properties": {
+        "custom_class_response": {
+          "title": "CustomClassOutput",
+          "$ref": "#/schemas/CustomClassOutput"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "source_kind": "adk/python",
+    "compiled_on": "2025-08-06T19:08:13.105889+00:00"
+  }
+}

@@ -1,0 +1,3 @@
+elasticsearch==7.13.2
+langchain-ibm
+ibm_watsonx_ai
